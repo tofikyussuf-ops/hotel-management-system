@@ -1,10 +1,30 @@
 // src/features/cabins/CabinRow.jsx
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteCabin } from '../../services/apiCabins';
 import ButtonText from '../../ui/ButtonText';
 import { formatCurrency } from '../../utils/helpers';
 
 function CabinRow({ cabin }) {
-  const { name, maxCapacity, regularPrice, discount, image } = cabin;
+  const {
+    id: cabinID,
+    name,
+    maxCapacity,
+    regularPrice,
+    discount,
+    image,
+  } = cabin;
 
+  const queryClient = useQueryClient();
+  const { isPending: isDeleting, mutate } = useMutation({
+    mutationFn: deleteCabin,
+    onSuccess: () => {
+      alert('cabin deleted sucessfully');
+      queryClient.invalidateQueries({
+        queryKey: ['cabins'],
+      });
+    },
+    onError: (err) => alert(err.message + 'sorry'),
+  });
   return (
     // TableRow replacement
     <div className="grid grid-cols-[0.6fr_1.8fr_2.2fr_1fr_1fr_1fr] items-center gap-x-[2.4rem] border-b border-grey-100 px-[2.4rem] py-[1.4rem] last:border-b-0">
@@ -33,7 +53,12 @@ function CabinRow({ cabin }) {
       </div>
 
       <div>
-        <ButtonText color="red" hasOutline>
+        <ButtonText
+          onClick={() => mutate(cabinID)}
+          disabled={isDeleting}
+          color="grey"
+          hasOutline
+        >
           Delete
         </ButtonText>
       </div>

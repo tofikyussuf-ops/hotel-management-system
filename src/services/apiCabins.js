@@ -1,6 +1,6 @@
 import supabase from './supabase';
 
-export default async function getCabins() {
+export default async function () {
   try {
     const { data, error } = await supabase.from('cabins').select('*');
 

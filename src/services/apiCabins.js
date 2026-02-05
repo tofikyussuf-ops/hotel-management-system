@@ -5,13 +5,11 @@ export async function getCabins() {
     const { data, error } = await supabase.from('cabins').select('*');
 
     if (error) {
-      console.error(error);
       throw new Error('Cabins could not be loaded');
     }
 
     return data;
   } catch (err) {
-    // This catches both Supabase errors and unexpected network errors
     throw new Error(err.message);
   }
 }
@@ -20,11 +18,23 @@ export async function deleteCabin(id) {
   try {
     const { data, error } = await supabase.from('cabins').delete().eq('id', id);
     if (error) {
-      console.error(error);
-      throw new Error('Cabins could not be loaded');
+      throw new Error('Cabins could not be deleted');
     }
     return data;
   } catch (error) {
-    throw new Error(err.message);
+    throw new Error(error.message);
+  }
+}
+
+export async function createCabin(newCabin) {
+  try {
+    const { data, error } = await supabase.from('cabins').insert([newCabin]);
+
+    if (error) {
+      throw new Error('Cabins could not be inserted');
+    }
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
   }
 }

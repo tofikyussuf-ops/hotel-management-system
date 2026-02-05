@@ -15,6 +15,7 @@ function Button({
   size = 'medium',
   variation = 'primary',
   children,
+  onclick,
   ...props
 }) {
   // Base classes that apply to ALL buttons
@@ -25,7 +26,7 @@ function Button({
   const className = `${baseStyles} ${sizes[size]} ${variations[variation]}`;
 
   return (
-    <button className={className} {...props}>
+    <button onClick={onclick} className={className} {...props}>
       {children}
     </button>
   );

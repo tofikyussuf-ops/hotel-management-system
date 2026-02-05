@@ -1,9 +1,9 @@
 // src/features/cabins/CabinRow.jsx
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import { deleteCabin } from '../../services/apiCabins';
 import ButtonText from '../../ui/ButtonText';
 import { formatCurrency } from '../../utils/helpers';
-
 function CabinRow({ cabin }) {
   const {
     id: cabinID,
@@ -18,12 +18,12 @@ function CabinRow({ cabin }) {
   const { isPending: isDeleting, mutate } = useMutation({
     mutationFn: deleteCabin,
     onSuccess: () => {
-      alert('cabin deleted sucessfully');
+      toast.success('Cabin successfully deleted');
       queryClient.invalidateQueries({
         queryKey: ['cabins'],
       });
     },
-    onError: (err) => alert(err.message + 'sorry'),
+    onError: (err) => toast.error(err.message),
   });
   return (
     // TableRow replacement

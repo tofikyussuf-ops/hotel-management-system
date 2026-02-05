@@ -1,17 +1,31 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import Input from '../../ui/Input';
-import Form from '../../ui/Form';
+import { createCabin } from '../../services/apiCabins';
 import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
+import Form from '../../ui/Form';
+import Input from '../../ui/Input';
 import Textarea from '../../ui/Textarea';
+import toast from 'react-hot-toast';
 
 function CreateCabinForm() {
-  // 1. Initialize the form hook
+  const queryClient = useQueryClient();
   const { register, handleSubmit, reset, getValues, formState } = useForm();
   const { errors } = formState;
 
+  const { mutate, isLoading: isCreating } = useMutation({
+    mutationFn: createCabin,
+    onSuccess: () => {
+      toast.success('New cabin created!');
+      queryClient.invalidateQueries({ queryKey: ['cabins'] });
+      reset(); // Clear the form
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
   function onSubmit(data) {
     console.log(data);
+    mutate(data);
     // Logic for Supabase mutation goes here later!
   }
 
@@ -125,7 +139,7 @@ function CreateCabinForm() {
         <Button variation="secondary" type="reset" onClick={() => reset()}>
           Cancel
         </Button>
-        <Button>Add cabin</Button>
+        <Button disabled={isCreating}>Add cabin</Button>
       </div>
     </Form>
   );

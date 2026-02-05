@@ -1,87 +1,132 @@
-import styled from "styled-components";
-
-import Input from "../../ui/Input";
-import Form from "../../ui/Form";
-import Button from "../../ui/Button";
-import FileInput from "../../ui/FileInput";
-import Textarea from "../../ui/Textarea";
-
-const FormRow = styled.div`
-  display: grid;
-  align-items: center;
-  grid-template-columns: 24rem 1fr 1.2fr;
-  gap: 2.4rem;
-
-  padding: 1.2rem 0;
-
-  &:first-child {
-    padding-top: 0;
-  }
-
-  &:last-child {
-    padding-bottom: 0;
-  }
-
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-
-  &:has(button) {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1.2rem;
-  }
-`;
-
-const Label = styled.label`
-  font-weight: 500;
-`;
-
-const Error = styled.span`
-  font-size: 1.4rem;
-  color: var(--color-red-700);
-`;
+import { useForm } from 'react-hook-form';
+import Input from '../../ui/Input';
+import Form from '../../ui/Form';
+import Button from '../../ui/Button';
+import FileInput from '../../ui/FileInput';
+import Textarea from '../../ui/Textarea';
 
 function CreateCabinForm() {
+  // 1. Initialize the form hook
+  const { register, handleSubmit, reset, getValues, formState } = useForm();
+  const { errors } = formState;
+
+  function onSubmit(data) {
+    console.log(data);
+    // Logic for Supabase mutation goes here later!
+  }
+
   return (
-    <Form>
-      <FormRow>
-        <Label htmlFor="name">Cabin name</Label>
-        <Input type="text" id="name" />
-      </FormRow>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      {/* --- CABIN NAME --- */}
+      <div className="grid grid-cols-[24rem_1fr_1.2fr] items-center gap-6 border-b border-grey-100 py-5 first:pt-0 last:border-0 last:pb-0">
+        <label className="font-medium text-grey-700" htmlFor="name">
+          Cabin name
+        </label>
+        <Input
+          type="text"
+          id="name"
+          {...register('name', { required: 'This field is required' })}
+        />
+        {errors?.name?.message && (
+          <span className="text-sm text-red-700">{errors.name.message}</span>
+        )}
+      </div>
 
-      <FormRow>
-        <Label htmlFor="maxCapacity">Maximum capacity</Label>
-        <Input type="number" id="maxCapacity" />
-      </FormRow>
+      {/* --- MAX CAPACITY --- */}
+      <div className="grid grid-cols-[24rem_1fr_1.2fr] items-center gap-6 border-b border-grey-100 py-5 last:border-0">
+        <label className="font-medium text-grey-700" htmlFor="maxCapacity">
+          Maximum capacity
+        </label>
+        <Input
+          type="number"
+          id="maxCapacity"
+          {...register('maxCapacity', {
+            required: 'This field is required',
+            min: { value: 1, message: 'Capacity should be at least 1' },
+          })}
+        />
+        {errors?.maxCapacity?.message && (
+          <span className="text-sm text-red-700">
+            {errors.maxCapacity.message}
+          </span>
+        )}
+      </div>
 
-      <FormRow>
-        <Label htmlFor="regularPrice">Regular price</Label>
-        <Input type="number" id="regularPrice" />
-      </FormRow>
+      {/* --- REGULAR PRICE --- */}
+      <div className="grid grid-cols-[24rem_1fr_1.2fr] items-center gap-6 border-b border-grey-100 py-5 last:border-0">
+        <label className="font-medium text-grey-700" htmlFor="regularPrice">
+          Regular price
+        </label>
+        <Input
+          type="number"
+          id="regularPrice"
+          {...register('regularPrice', {
+            required: 'This field is required',
+            min: { value: 1, message: 'Price should be at least 1' },
+          })}
+        />
+        {errors?.regularPrice?.message && (
+          <span className="text-sm text-red-700">
+            {errors.regularPrice.message}
+          </span>
+        )}
+      </div>
 
-      <FormRow>
-        <Label htmlFor="discount">Discount</Label>
-        <Input type="number" id="discount" defaultValue={0} />
-      </FormRow>
+      {/* --- DISCOUNT --- */}
+      <div className="grid grid-cols-[24rem_1fr_1.2fr] items-center gap-6 border-b border-grey-100 py-5 last:border-0">
+        <label className="font-medium text-grey-700" htmlFor="discount">
+          Discount
+        </label>
+        <Input
+          type="number"
+          id="discount"
+          defaultValue={0}
+          {...register('discount', {
+            required: 'This field is required',
+            validate: (value) =>
+              Number(value) <= Number(getValues().regularPrice) ||
+              'Discount should be less than regular price',
+          })}
+        />
+        {errors?.discount?.message && (
+          <span className="text-sm text-red-700">
+            {errors.discount.message}
+          </span>
+        )}
+      </div>
 
-      <FormRow>
-        <Label htmlFor="description">Description for website</Label>
-        <Textarea type="number" id="description" defaultValue="" />
-      </FormRow>
+      {/* --- DESCRIPTION --- */}
+      <div className="grid grid-cols-[24rem_1fr_1.2fr] items-center gap-6 border-b border-grey-100 py-5 last:border-0">
+        <label className="font-medium text-grey-700" htmlFor="description">
+          Description for website
+        </label>
+        <Textarea
+          id="description"
+          defaultValue=""
+          {...register('description', { required: 'This field is required' })}
+        />
+        {errors?.description?.message && (
+          <span className="text-sm text-red-700">
+            {errors.description.message}
+          </span>
+        )}
+      </div>
 
-      <FormRow>
-        <Label htmlFor="image">Cabin photo</Label>
+      {/* --- IMAGE --- */}
+      <div className="grid grid-cols-[24rem_1fr_1.2fr] items-center gap-6 border-b border-grey-100 py-5 last:border-0">
+        <label className="font-medium text-grey-700" htmlFor="image">
+          Cabin photo
+        </label>
         <FileInput id="image" accept="image/*" />
-      </FormRow>
+      </div>
 
-      <FormRow>
-        {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+      {/* --- BUTTONS --- */}
+      <div className="flex justify-end gap-3 py-5">
+        <Button variation="secondary" type="reset" onClick={() => reset()}>
           Cancel
         </Button>
-        <Button>Edit cabin</Button>
-      </FormRow>
+        <Button>Add cabin</Button>
+      </div>
     </Form>
   );
 }

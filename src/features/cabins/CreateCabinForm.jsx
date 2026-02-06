@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { createCabin } from '../../services/apiCabins';
 import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import Form from '../../ui/Form';
+import FormRow from '../../ui/FormRow';
 import Input from '../../ui/Input';
 import Textarea from '../../ui/Textarea';
-import toast from 'react-hot-toast';
 
 function CreateCabinForm() {
   const queryClient = useQueryClient();
@@ -18,82 +19,55 @@ function CreateCabinForm() {
     onSuccess: () => {
       toast.success('New cabin created!');
       queryClient.invalidateQueries({ queryKey: ['cabins'] });
-      reset(); // Clear the form
+      reset();
     },
     onError: (err) => toast.error(err.message),
   });
 
   function onSubmit(data) {
-    console.log(data);
-    mutate(data);
-    // Logic for Supabase mutation goes here later!
+    mutate({ ...data, image: data.image[0] });
   }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      {/* --- CABIN NAME --- */}
-      <div className="grid grid-cols-[24rem_1fr_1.2fr] items-center gap-6 border-b border-grey-100 py-5 first:pt-0 last:border-0 last:pb-0">
-        <label className="font-medium text-grey-700" htmlFor="name">
-          Cabin name
-        </label>
+      <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
           id="name"
+          disabled={isCreating}
           {...register('name', { required: 'This field is required' })}
         />
-        {errors?.name?.message && (
-          <span className="text-sm text-red-700">{errors.name.message}</span>
-        )}
-      </div>
+      </FormRow>
 
-      {/* --- MAX CAPACITY --- */}
-      <div className="grid grid-cols-[24rem_1fr_1.2fr] items-center gap-6 border-b border-grey-100 py-5 last:border-0">
-        <label className="font-medium text-grey-700" htmlFor="maxCapacity">
-          Maximum capacity
-        </label>
+      <FormRow label="Maximum capacity" error={errors?.maxCapacity?.message}>
         <Input
           type="number"
           id="maxCapacity"
+          disabled={isCreating}
           {...register('maxCapacity', {
             required: 'This field is required',
             min: { value: 1, message: 'Capacity should be at least 1' },
           })}
         />
-        {errors?.maxCapacity?.message && (
-          <span className="text-sm text-red-700">
-            {errors.maxCapacity.message}
-          </span>
-        )}
-      </div>
+      </FormRow>
 
-      {/* --- REGULAR PRICE --- */}
-      <div className="grid grid-cols-[24rem_1fr_1.2fr] items-center gap-6 border-b border-grey-100 py-5 last:border-0">
-        <label className="font-medium text-grey-700" htmlFor="regularPrice">
-          Regular price
-        </label>
+      <FormRow label="Regular price" error={errors?.regularPrice?.message}>
         <Input
           type="number"
           id="regularPrice"
+          disabled={isCreating}
           {...register('regularPrice', {
             required: 'This field is required',
             min: { value: 1, message: 'Price should be at least 1' },
           })}
         />
-        {errors?.regularPrice?.message && (
-          <span className="text-sm text-red-700">
-            {errors.regularPrice.message}
-          </span>
-        )}
-      </div>
+      </FormRow>
 
-      {/* --- DISCOUNT --- */}
-      <div className="grid grid-cols-[24rem_1fr_1.2fr] items-center gap-6 border-b border-grey-100 py-5 last:border-0">
-        <label className="font-medium text-grey-700" htmlFor="discount">
-          Discount
-        </label>
+      <FormRow label="Discount" error={errors?.discount?.message}>
         <Input
           type="number"
           id="discount"
+          disabled={isCreating}
           defaultValue={0}
           {...register('discount', {
             required: 'This field is required',
@@ -102,39 +76,28 @@ function CreateCabinForm() {
               'Discount should be less than regular price',
           })}
         />
-        {errors?.discount?.message && (
-          <span className="text-sm text-red-700">
-            {errors.discount.message}
-          </span>
-        )}
-      </div>
+      </FormRow>
 
-      {/* --- DESCRIPTION --- */}
-      <div className="grid grid-cols-[24rem_1fr_1.2fr] items-center gap-6 border-b border-grey-100 py-5 last:border-0">
-        <label className="font-medium text-grey-700" htmlFor="description">
-          Description for website
-        </label>
+      <FormRow
+        label="Description for website"
+        error={errors?.description?.message}
+      >
         <Textarea
           id="description"
+          disabled={isCreating}
           defaultValue=""
           {...register('description', { required: 'This field is required' })}
         />
-        {errors?.description?.message && (
-          <span className="text-sm text-red-700">
-            {errors.description.message}
-          </span>
-        )}
-      </div>
+      </FormRow>
 
-      {/* --- IMAGE --- */}
-      <div className="grid grid-cols-[24rem_1fr_1.2fr] items-center gap-6 border-b border-grey-100 py-5 last:border-0">
-        <label className="font-medium text-grey-700" htmlFor="image">
-          Cabin photo
-        </label>
-        <FileInput id="image" accept="image/*" />
-      </div>
+      <FormRow label="Cabin photo" error={errors?.image?.message}>
+        <FileInput
+          id="image"
+          accept="image/*"
+          {...register('image', { required: 'This field is required' })}
+        />
+      </FormRow>
 
-      {/* --- BUTTONS --- */}
       <div className="flex justify-end gap-3 py-5">
         <Button variation="secondary" type="reset" onClick={() => reset()}>
           Cancel
@@ -144,5 +107,4 @@ function CreateCabinForm() {
     </Form>
   );
 }
-
 export default CreateCabinForm;

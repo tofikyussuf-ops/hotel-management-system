@@ -1,10 +1,15 @@
 // src/features/cabins/CabinRow.jsx
 import { useState } from 'react';
+import { HiSquare2Stack } from 'react-icons/hi2';
 import ButtonText from '../../ui/ButtonText';
 import { formatCurrency } from '../../utils/helpers';
 import CreateCabinForm from './CreateCabinForm';
+import { useCreateCabin } from './useCreateCabin';
 import { useDeleteCabin } from './useDeleteCabin';
 function CabinRow({ cabin }) {
+  const { isCreating, createCabin } = useCreateCabin();
+  const [showForm, setShowForm] = useState(false);
+  const { isDeleting, deleteCabin } = useDeleteCabin();
   const {
     id: cabinID,
     name,
@@ -12,9 +17,21 @@ function CabinRow({ cabin }) {
     regularPrice,
     discount,
     image,
+    description,
   } = cabin;
-  const [showForm, setShowForm] = useState(false);
-  const { isDeleting, deleteCabin } = useDeleteCabin();
+  function handleDuplicate() {
+    createCabin({
+      newCabinData: {
+        name: `Copy of ${name}`,
+        maxCapacity,
+        regularPrice,
+        discount,
+        image,
+        description,
+      },
+    });
+  }
+  const isWorking = isDeleting || isCreating;
   return (
     // TableRow replacement
     <>
@@ -40,7 +57,7 @@ function CabinRow({ cabin }) {
         </div>
         <div>
           <ButtonText
-            disabled={isDeleting}
+            disabled={isWorking}
             onClick={() => deleteCabin(cabinID)}
             color="grey"
             hasOutline
@@ -53,6 +70,14 @@ function CabinRow({ cabin }) {
             onClick={() => setShowForm(!showForm)}
           >
             Edit
+          </ButtonText>
+          <ButtonText
+            color="grey"
+            hasOutline
+            disabled={isWorking}
+            onClick={handleDuplicate}
+          >
+            <HiSquare2Stack />
           </ButtonText>
         </div>
       </div>

@@ -1,27 +1,22 @@
-import { useState } from 'react';
 import Button from '../../ui/Button';
 import Modal from '../../ui/Modal';
 import CreateCabinForm from './CreateCabinForm';
-
+// No more local state!
 function AddCabin() {
-  const [isOpenModal, setisOpenModal] = useState(false);
   return (
-    <>
-      <div className="flex justify-start">
-        <Button
-          variation="primary"
-          onClick={() => setisOpenModal((show) => !show)}
-        >
-          Add New Cabin
-        </Button>
-      </div>
+    <div>
+      <Modal>
+        {/* Step 1: Tell the modal which "window" this button opens */}
+        <Modal.Open opens="cabin-form">
+          <Button variation="primary">Add New Cabin</Button>
+        </Modal.Open>
 
-      {isOpenModal && (
-        <Modal onClose={() => setisOpenModal(false)}>
-          <CreateCabinForm onClose={() => setisOpenModal(false)} />
-        </Modal>
-      )}
-    </>
+        {/* Step 2: Define the window with a matching name */}
+        <Modal.Window name="cabin-form">
+          <CreateCabinForm />
+        </Modal.Window>
+      </Modal>
+    </div>
   );
 }
 

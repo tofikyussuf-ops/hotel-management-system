@@ -17,14 +17,28 @@ function CabinTable() {
   const [searchParams] = useSearchParams();
   if (isPending) return <Spinner />;
   if (!cabins) return <p>No cabins found. check your connection</p>;
+  // 1) FILTER (Current logic)
   const filterValue = searchParams.get('discount') || 'all';
-
   let filteredCabins;
   if (filterValue === 'all') filteredCabins = cabins;
   if (filterValue === 'no-discount')
-    filteredCabins = cabins.filter((cabin) => cabin.discount === 0);
+    filteredCabins = cabins.filter((c) => c.discount === 0);
   if (filterValue === 'with-discount')
-    filteredCabins = cabins.filter((cabin) => cabin.discount > 0);
+    filteredCabins = cabins.filter((c) => c.discount > 0);
+
+  // 2) SORT
+  const sortBy = searchParams.get('sortBy') || 'startDate-asc';
+  const [field, direction] = sortBy.split('-');
+  const modifier = direction === 'asc' ? 1 : -1;
+
+  // Create a copy of the array before sorting (sort() mutates the original)
+  const sortedCabins = filteredCabins.sort((a, b) => {
+    // Handling strings (like names) vs numbers (like price)
+    if (typeof a[field] === 'string') {
+      return a[field].localeCompare(b[field]) * modifier;
+    }
+    return (a[field] - b[field]) * modifier;
+  });
 
   return (
     // 2. Wrap the entire table structure in the Menus provider
@@ -39,7 +53,7 @@ function CabinTable() {
           <div></div>
         </header>
 
-        {filteredCabins.map((cabin) => (
+        {sortedCabins.map((cabin) => (
           <CabinRow cabin={cabin} key={cabin.id} />
         ))}
       </div>

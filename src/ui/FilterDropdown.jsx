@@ -1,8 +1,8 @@
-import { HiFunnel } from 'react-icons/hi2'; // A funnel icon looks better for filters
+// A funnel icon looks better for filters
 import { useSearchParams } from 'react-router-dom';
 import Menus from './Menus';
 
-function FilterDropdown({ filterField, options }) {
+function FilterDropdown({ filterField, options, icon }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentFilter = searchParams.get(filterField) || options[0].value;
 
@@ -14,7 +14,7 @@ function FilterDropdown({ filterField, options }) {
   return (
     <Menus>
       <Menus.Menu>
-        <Menus.Toggle id={filterField} icon={<HiFunnel />} />
+        <Menus.Toggle id={filterField} icon={icon} />
 
         <Menus.List id={filterField}>
           {options.map((option) => (

@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import { getCabins } from '../../services/apiCabins';
+import Menus from '../../ui/Menus'; // 1. Import the Menus component
 import Spinner from '../../ui/Spinner';
 import CabinRow from './CabinRow';
-import Menus from '../../ui/Menus'; // 1. Import the Menus component
 
 function CabinTable() {
   const {
@@ -13,9 +14,17 @@ function CabinTable() {
     queryKey: ['cabins'],
     queryFn: getCabins,
   });
-
+  const [searchParams] = useSearchParams();
   if (isPending) return <Spinner />;
   if (!cabins) return <p>No cabins found. check your connection</p>;
+  const filterValue = searchParams.get('discount') || 'all';
+
+  let filteredCabins;
+  if (filterValue === 'all') filteredCabins = cabins;
+  if (filterValue === 'no-discount')
+    filteredCabins = cabins.filter((cabin) => cabin.discount === 0);
+  if (filterValue === 'with-discount')
+    filteredCabins = cabins.filter((cabin) => cabin.discount > 0);
 
   return (
     // 2. Wrap the entire table structure in the Menus provider
@@ -30,8 +39,7 @@ function CabinTable() {
           <div></div>
         </header>
 
-        {/* Now every CabinRow can access the MenusContext */}
-        {cabins.map((cabin) => (
+        {filteredCabins.map((cabin) => (
           <CabinRow cabin={cabin} key={cabin.id} />
         ))}
       </div>

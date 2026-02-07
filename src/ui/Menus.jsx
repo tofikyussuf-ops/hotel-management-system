@@ -92,7 +92,7 @@ function Button({ children, icon, onClick }) {
     <li>
       <button
         onClick={handleClick}
-        className="gap-43 flex w-full items-center border-none bg-none px-4 py-2 text-left text-[1.4rem] font-medium text-grey-600 transition-all duration-200 hover:bg-grey-50 disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:h-5 [&_svg]:w-5 [&_svg]:text-grey-400"
+        className="flex w-full items-center gap-4 border-none bg-none px-4 py-2 text-left text-[1.4rem] font-medium text-grey-600 transition-all duration-200 hover:bg-grey-50 disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:h-5 [&_svg]:w-5 [&_svg]:text-grey-400"
       >
         {icon} <span>{children}</span>
       </button>

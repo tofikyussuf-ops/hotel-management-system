@@ -1,5 +1,4 @@
 // src/features/cabins/CabinRow.jsx
-import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
 import ConfirmDelete from '../../ui/ConfirmDelete';
 import Menus from '../../ui/Menus';
 import Modal from '../../ui/Modal';
@@ -64,22 +63,18 @@ function CabinRow({ cabin }) {
 
               <Menus.List id={cabinId}>
                 {/* Duplicate doesn't need a modal, just a button */}
-                <Menus.Button
-                  icon={<HiSquare2Stack />}
-                  onClick={handleDuplicate}
-                  disabled={isWorking}
-                >
+                <Menus.Button onClick={handleDuplicate} disabled={isWorking}>
                   Duplicate
                 </Menus.Button>
 
                 {/* Edit needs a modal window */}
                 <Modal.Open opens="edit">
-                  <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+                  <Menus.Button> Edit</Menus.Button>
                 </Modal.Open>
 
                 {/* Delete needs a modal window */}
                 <Modal.Open opens="delete">
-                  <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+                  <Menus.Button>Delete</Menus.Button>
                 </Modal.Open>
               </Menus.List>
 

@@ -1,7 +1,8 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { HiEllipsisVertical } from 'react-icons/hi2';
 import { useOutsideClick } from '../hooks/useOutsideClick';
+
 const MenusContext = createContext();
 
 function Menus({ children }) {
@@ -10,6 +11,19 @@ function Menus({ children }) {
 
   const close = () => setOpenId('');
   const open = setOpenId;
+  useEffect(
+    function () {
+      function handleScroll() {
+        if (openId) {
+          close();
+        }
+      }
+      window.addEventListener('scroll', handleScroll, true);
+
+      return () => window.removeEventListener('scroll', handleScroll, true);
+    },
+    [openId]
+  );
 
   return (
     <MenusContext.Provider
@@ -37,8 +51,12 @@ function Toggle({ id }) {
   }
 
   return (
-    <button onClick={handleClick} className="...">
-      <HiEllipsisVertical />
+    <button
+      onClick={handleClick}
+      className="translate-x-[0.8rem] rounded-md border-none bg-none p-3 transition-all duration-200 hover:bg-grey-100 focus:outline-none"
+    >
+      {/* Increased icon size to 2.8rem or 3.2rem */}
+      <HiEllipsisVertical className="h-8 w-8 text-grey-700" />
     </button>
   );
 }
@@ -53,7 +71,7 @@ function List({ id, children }) {
   return createPortal(
     <ul
       ref={ref}
-      className="fixed z-[1000] rounded-md border border-grey-100 bg-white py-2 shadow-md"
+      className="fixed z-[1000] rounded-md border border-grey-100 bg-white px-4 py-3 shadow-md"
       style={{ right: `${position.x}px`, top: `${position.y}px` }}
     >
       {children}
@@ -72,7 +90,10 @@ function Button({ children, icon, onClick }) {
 
   return (
     <li>
-      <button onClick={handleClick} className="...">
+      <button
+        onClick={handleClick}
+        className="flex w-full items-center gap-4 border-none bg-none px-4 py-2 text-left text-[1.4rem] font-medium text-grey-600 transition-all duration-200 hover:bg-grey-50 disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:h-5 [&_svg]:w-5 [&_svg]:text-grey-400"
+      >
         {icon} <span>{children}</span>
       </button>
     </li>

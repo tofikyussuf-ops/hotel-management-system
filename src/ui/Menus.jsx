@@ -34,7 +34,7 @@ function Menus({ children }) {
   );
 }
 
-function Toggle({ id }) {
+function Toggle({ id, icon }) {
   const { openId, close, open, setPosition } = useContext(MenusContext);
 
   function handleClick(e) {
@@ -56,7 +56,7 @@ function Toggle({ id }) {
       className="translate-x-[0.8rem] rounded-md border-none bg-none p-3 transition-all duration-200 hover:bg-grey-100 focus:outline-none"
     >
       {/* Increased icon size to 2.8rem or 3.2rem */}
-      <HiEllipsisVertical className="h-8 w-8 text-grey-700" />
+      {icon ? icon : <HiEllipsisVertical className="h-8 w-8 text-grey-700" />}
     </button>
   );
 }

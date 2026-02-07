@@ -3,19 +3,18 @@ import Heading from './Heading';
 
 function ConfirmDelete({ resourceName, onConfirm, disabled, onCloseModal }) {
   return (
-    <div className="flex w-[40rem] flex-col gap-[1.2rem]">
+    <div className="flex w-[40rem] flex-col gap-5">
       <Heading as="h3">Delete {resourceName}</Heading>
-
-      <p className="mb-[1.2rem] text-grey-500">
+      <p className="mb-5 text-grey-500">
         Are you sure you want to delete this {resourceName} permanently? This
         action cannot be undone.
       </p>
 
-      <div className="flex justify-end gap-[1.2rem]">
+      <div className="flex justify-end gap-5">
         <Button
           variation="secondary"
           disabled={disabled}
-          onClick={onCloseModal}
+          onClick={onCloseModal} // Provided by Modal.Window's cloneElement
         >
           Cancel
         </Button>

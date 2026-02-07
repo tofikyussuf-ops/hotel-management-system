@@ -1,17 +1,19 @@
 // src/features/cabins/CabinRow.jsx
-import { useState } from 'react';
-import { HiSquare2Stack } from 'react-icons/hi2';
-import ButtonText from '../../ui/ButtonText';
+import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
+import ConfirmDelete from '../../ui/ConfirmDelete';
+import Menus from '../../ui/Menus';
+import Modal from '../../ui/Modal';
 import { formatCurrency } from '../../utils/helpers';
 import CreateCabinForm from './CreateCabinForm';
 import { useCreateCabin } from './useCreateCabin';
 import { useDeleteCabin } from './useDeleteCabin';
+
 function CabinRow({ cabin }) {
   const { isCreating, createCabin } = useCreateCabin();
-  const [showForm, setShowForm] = useState(false);
+
   const { isDeleting, deleteCabin } = useDeleteCabin();
   const {
-    id: cabinID,
+    id: cabinId,
     name,
     maxCapacity,
     regularPrice,
@@ -56,32 +58,48 @@ function CabinRow({ cabin }) {
           {discount ? formatCurrency(discount) : <span>&mdash;</span>}
         </div>
         <div>
-          <ButtonText
-            disabled={isWorking}
-            onClick={() => deleteCabin(cabinID)}
-            color="grey"
-            hasOutline
-          >
-            Delete
-          </ButtonText>
-          <ButtonText
-            color="grey"
-            hasOutline
-            onClick={() => setShowForm(!showForm)}
-          >
-            Edit
-          </ButtonText>
-          <ButtonText
-            color="grey"
-            hasOutline
-            disabled={isWorking}
-            onClick={handleDuplicate}
-          >
-            <HiSquare2Stack />
-          </ButtonText>
+          <Modal>
+            <Menus.Menu>
+              <Menus.Toggle id={cabinId} />
+
+              <Menus.List id={cabinId}>
+                {/* Duplicate doesn't need a modal, just a button */}
+                <Menus.Button
+                  icon={<HiSquare2Stack />}
+                  onClick={handleDuplicate}
+                  disabled={isWorking}
+                >
+                  Duplicate
+                </Menus.Button>
+
+                {/* Edit needs a modal window */}
+                <Modal.Open opens="edit">
+                  <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+                </Modal.Open>
+
+                {/* Delete needs a modal window */}
+                <Modal.Open opens="delete">
+                  <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+                </Modal.Open>
+              </Menus.List>
+
+              {/* Modal Windows remain here, triggered by the buttons above */}
+              <Modal.Window name="edit">
+                <CreateCabinForm cabinToEdit={cabin} />
+              </Modal.Window>
+
+              <Modal.Window name="delete">
+                <ConfirmDelete
+                  resourceName="cabins"
+                  disabled={isDeleting}
+                  onConfirm={() => deleteCabin(cabinId)}
+                />
+              </Modal.Window>
+            </Menus.Menu>
+          </Modal>
         </div>
+        {/* --- MENU APPLICATION ENDS HERE --- */}
       </div>
-      {showForm && <CreateCabinForm cabinToEdit={cabin} />}
     </>
   );
 }

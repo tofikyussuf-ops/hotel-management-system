@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-
+import { HiXMark } from 'react-icons/hi2';
 function Modal({ children, onClose }) {
   // Using React Portal to render the modal outside the DOM hierarchy
   return createPortal(
@@ -10,7 +10,7 @@ function Modal({ children, onClose }) {
           className="absolute right-[1.9rem] top-[1.2rem] translate-x-[0.8rem] rounded-sm border-none bg-none p-[0.4rem] transition-all duration-200 hover:bg-grey-100 [&_svg]:h-[2.4rem] [&_svg]:w-[2.4rem] [&_svg]:text-grey-500"
         >
           {/* Close Icon (HiXMark usually) */}
-          <svg>...</svg>
+          <HiXMark className="h-6 w-6 text-grey-500" />
         </button>
 
         <div>{children}</div>

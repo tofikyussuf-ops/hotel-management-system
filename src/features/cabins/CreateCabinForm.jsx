@@ -8,7 +8,7 @@ import Textarea from '../../ui/Textarea';
 import { useCreateCabin } from './useCreateCabin';
 import { useEditCabin } from './useEdit.Cabin';
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onClose }) {
   const { isCreating, createCabin } = useCreateCabin();
   const { isEditing, editCabin } = useEditCabin();
 
@@ -27,12 +27,22 @@ function CreateCabinForm({ cabinToEdit = {} }) {
     if (isEditSession)
       editCabin(
         { newCabinData: { ...data, image }, id: editId },
-        { onSuccess: () => reset() }
+        {
+          onSuccess: () => {
+            onClose?.();
+            reset();
+          },
+        }
       );
     else
       createCabin(
         { newCabinData: { ...data, image } }, // 👈 Wrap it here!
-        { onSuccess: () => reset() }
+        {
+          onSuccess: () => {
+            onClose?.();
+            reset();
+          },
+        }
       );
   }
   return (
@@ -108,7 +118,14 @@ function CreateCabinForm({ cabinToEdit = {} }) {
       </FormRow>
 
       <div className="flex justify-end gap-3 py-5">
-        <Button variation="secondary" type="reset" onClick={() => reset()}>
+        <Button
+          variation="secondary"
+          type="reset"
+          onClick={() => {
+            onClose?.();
+            reset();
+          }}
+        >
           Cancel
         </Button>
         <Button disabled={isWorking}>

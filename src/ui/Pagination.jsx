@@ -1,24 +1,6 @@
-function Pagination({ count }) {
-  // Logic for page calculation would go here
-  return (
-    <div className="flex w-full items-center justify-between">
-      <p className="ml-[0.8rem] text-[1.4rem] [&_span]:font-semibold">
-        Showing <span>1</span> to <span>10</span> of <span>{count}</span>{' '}
-        results
-      </p>
-
-      <div className="flex gap-[0.6rem]">
-        <PaginationButton>
-          <svg>...</svg> <span>Previous</span>
-        </PaginationButton>
-
-        <PaginationButton active>
-          <span>Next</span> <svg>...</svg>
-        </PaginationButton>
-      </div>
-    </div>
-  );
-}
+import { HiChevronLeft, HiChevronRight } from 'react-icons/hi2';
+import { useSearchParams } from 'react-router-dom';
+import { PAGE_SIZE } from '../utils/constants';
 
 function PaginationButton({ active, children, disabled, onClick }) {
   const activeClass = active
@@ -35,3 +17,58 @@ function PaginationButton({ active, children, disabled, onClick }) {
     </button>
   );
 }
+
+function Pagination({ count }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // 1. Current Page Logic
+  const currentPage = !searchParams.get('page')
+    ? 1
+    : Number(searchParams.get('page'));
+
+  // 2. Page Count Calculation
+  const pageCount = Math.ceil(count / PAGE_SIZE);
+
+  function nextPage() {
+    const next = currentPage === pageCount ? currentPage : currentPage + 1;
+    searchParams.set('page', next);
+    setSearchParams(searchParams);
+  }
+
+  function prevPage() {
+    const prev = currentPage === 1 ? currentPage : currentPage - 1;
+    searchParams.set('page', prev);
+    setSearchParams(searchParams);
+  }
+
+  // Hide if there's only one page (or zero)
+  if (pageCount <= 1) return null;
+
+  return (
+    <div className="flex w-full items-center justify-between">
+      <p className="ml-[0.8rem] text-[1.4rem] [&_span]:font-semibold">
+        Showing <span>{(currentPage - 1) * PAGE_SIZE + 1}</span> to{' '}
+        <span>
+          {/* Ensure we don't show a number higher than total count */}
+          {currentPage === pageCount ? count : currentPage * PAGE_SIZE}
+        </span>{' '}
+        of <span>{count}</span> results
+      </p>
+
+      <div className="flex gap-[0.6rem]">
+        <PaginationButton onClick={prevPage} disabled={currentPage === 1}>
+          <HiChevronLeft /> <span>Previous</span>
+        </PaginationButton>
+
+        <PaginationButton
+          onClick={nextPage}
+          disabled={currentPage === pageCount}
+        >
+          <span>Next</span> <HiChevronRight />
+        </PaginationButton>
+      </div>
+    </div>
+  );
+}
+
+export default Pagination;

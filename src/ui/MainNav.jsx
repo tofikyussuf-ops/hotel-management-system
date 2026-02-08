@@ -1,14 +1,16 @@
 // src/ui/MainNav.jsx
-import { NavLink } from 'react-router-dom';
 import {
-  HiOutlineHome,
   HiOutlineCalendarDays,
+  HiOutlineCog6Tooth,
+  HiOutlineHome,
   HiOutlineHomeModern,
   HiOutlineUsers,
-  HiOutlineCog6Tooth,
 } from 'react-icons/hi2';
+import { NavLink } from 'react-router-dom';
+import { useSidebar } from '../context/SidebarContext.jsx';
 
 function MainNav() {
+  const { close } = useSidebar();
   // Base classes for the link container
   const navLinkClasses = ({ isActive }) =>
     `group flex items-center gap-3 px-6 py-3 transition-all font-medium ${
@@ -27,7 +29,7 @@ function MainNav() {
     <nav>
       <ul className="flex flex-col gap-2">
         <li>
-          <NavLink to="/dashboard" className={navLinkClasses}>
+          <NavLink to="/dashboard" onClick={close} className={navLinkClasses}>
             {({ isActive }) => (
               <>
                 <HiOutlineHome className={iconClasses(isActive)} />
@@ -38,7 +40,7 @@ function MainNav() {
         </li>
 
         <li>
-          <NavLink to="/bookings" className={navLinkClasses}>
+          <NavLink to="/bookings" onClick={close} className={navLinkClasses}>
             {({ isActive }) => (
               <>
                 <HiOutlineCalendarDays className={iconClasses(isActive)} />
@@ -49,7 +51,7 @@ function MainNav() {
         </li>
 
         <li>
-          <NavLink to="/cabins" className={navLinkClasses}>
+          <NavLink to="/cabins" onClick={close} className={navLinkClasses}>
             {({ isActive }) => (
               <>
                 <HiOutlineHomeModern className={iconClasses(isActive)} />
@@ -60,7 +62,7 @@ function MainNav() {
         </li>
 
         <li>
-          <NavLink to="/users" className={navLinkClasses}>
+          <NavLink to="/users" onClick={close} className={navLinkClasses}>
             {({ isActive }) => (
               <>
                 <HiOutlineUsers className={iconClasses(isActive)} />
@@ -71,7 +73,7 @@ function MainNav() {
         </li>
 
         <li>
-          <NavLink to="/settings" className={navLinkClasses}>
+          <NavLink to="/settings" onClick={close} className={navLinkClasses}>
             {({ isActive }) => (
               <>
                 <HiOutlineCog6Tooth className={iconClasses(isActive)} />

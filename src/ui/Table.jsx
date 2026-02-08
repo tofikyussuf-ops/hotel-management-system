@@ -42,7 +42,7 @@ function Row({ children }) {
 }
 
 function Body({ data, render }) {
-  if (!data.length) return <Empty>No data to show at the moment</Empty>;
+  if (!data?.length) return <Empty>No data to show at the moment</Empty>;
   return <section className="my-[0.4rem]">{data.map(render)}</section>;
 }
 

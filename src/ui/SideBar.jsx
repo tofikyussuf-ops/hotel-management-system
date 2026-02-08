@@ -2,6 +2,7 @@ import { useSidebar } from '../context/SidebarContext.jsx';
 import { useOutsideClick } from '../hooks/useOutsideClick';
 import Logo from './Logo';
 import MainNav from './MainNav';
+import Uploader from '../data/Uploader.jsx';
 function Sidebar() {
   const { isOpen, close } = useSidebar();
   const ref = useOutsideClick(close, false);
@@ -13,6 +14,7 @@ function Sidebar() {
     >
       <Logo />
       <MainNav />
+      <Uploader />
     </aside>
   );
 }

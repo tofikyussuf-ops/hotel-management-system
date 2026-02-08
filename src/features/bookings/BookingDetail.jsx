@@ -1,46 +1,41 @@
-import styled from "styled-components";
+import BookingDataBox from './BookingDataBox';
+import Row from '../../ui/Row';
+import Heading from '../../ui/Heading';
+import Tag from '../../ui/Tag';
+import ButtonGroup from '../../ui/ButtonGroup';
+import Button from '../../ui/Button';
+import ButtonText from '../../ui/ButtonText';
 
-import BookingDataBox from "./BookingDataBox";
-import Row from "../../ui/Row";
-import Heading from "../../ui/Heading";
-import Tag from "../../ui/Tag";
-import ButtonGroup from "../../ui/ButtonGroup";
-import Button from "../../ui/Button";
-import ButtonText from "../../ui/ButtonText";
-
-import { useMoveBack } from "../../hooks/useMoveBack";
-
-const HeadingGroup = styled.div`
-  display: flex;
-  gap: 2.4rem;
-  align-items: center;
-`;
+import { useMoveBack } from '../../hooks/useMoveBack';
 
 function BookingDetail() {
+  // We'll replace these with useBooking() hook later
   const booking = {};
-  const status = "checked-in";
+  const status = 'checked-in';
 
   const moveBack = useMoveBack();
 
   const statusToTagName = {
-    unconfirmed: "blue",
-    "checked-in": "green",
-    "checked-out": "silver",
+    unconfirmed: 'blue',
+    'checked-in': 'green',
+    'checked-out': 'silver',
   };
 
   return (
     <>
       <Row type="horizontal">
-        <HeadingGroup>
+        {/* Replaced HeadingGroup styled component with a simple div */}
+        <div className="flex items-center gap-[2.4rem]">
           <Heading as="h1">Booking #X</Heading>
-          <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
-        </HeadingGroup>
+          <Tag type={statusToTagName[status]}>{status.replace('-', ' ')}</Tag>
+        </div>
         <ButtonText onClick={moveBack}>&larr; Back</ButtonText>
       </Row>
 
       <BookingDataBox booking={booking} />
 
       <ButtonGroup>
+        {/* You can add Check-in or Check-out buttons here later */}
         <Button variation="secondary" onClick={moveBack}>
           Back
         </Button>

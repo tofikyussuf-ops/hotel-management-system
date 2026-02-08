@@ -1,38 +1,8 @@
-import styled from "styled-components";
-import { format, isToday } from "date-fns";
-
-import Tag from "../../ui/Tag";
-import Table from "../../ui/Table";
-
-import { formatCurrency } from "../../utils/helpers";
-import { formatDistanceFromNow } from "../../utils/helpers";
-
-const Cabin = styled.div`
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: var(--color-grey-600);
-  font-family: "Sono";
-`;
-
-const Stacked = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-
-  & span:first-child {
-    font-weight: 500;
-  }
-
-  & span:last-child {
-    color: var(--color-grey-500);
-    font-size: 1.2rem;
-  }
-`;
-
-const Amount = styled.div`
-  font-family: "Sono";
-  font-weight: 500;
-`;
+import { format, isToday } from 'date-fns';
+import Tag from '../../ui/Tag';
+import Table from '../../ui/Table';
+import { formatCurrency } from '../../utils/helpers';
+import { formatDistanceFromNow } from '../../utils/helpers';
 
 function BookingRow({
   booking: {
@@ -49,36 +19,45 @@ function BookingRow({
   },
 }) {
   const statusToTagName = {
-    unconfirmed: "blue",
-    "checked-in": "green",
-    "checked-out": "silver",
+    unconfirmed: 'blue',
+    'checked-in': 'green',
+    'checked-out': 'silver',
   };
 
   return (
     <Table.Row>
-      <Cabin>{cabinName}</Cabin>
+      {/* Cabin Name */}
+      <div className="font-sono text-[1.6rem] font-semibold text-grey-600">
+        {cabinName}
+      </div>
 
-      <Stacked>
-        <span>{guestName}</span>
-        <span>{email}</span>
-      </Stacked>
+      {/* Guest Info */}
+      <div className="flex flex-col gap-1">
+        <span className="font-medium text-grey-700">{guestName}</span>
+        <span className="text-[1.2rem] text-grey-500">{email}</span>
+      </div>
 
-      <Stacked>
-        <span>
+      {/* Date Details */}
+      <div className="flex flex-col gap-1">
+        <span className="font-medium">
           {isToday(new Date(startDate))
-            ? "Today"
-            : formatDistanceFromNow(startDate)}{" "}
+            ? 'Today'
+            : formatDistanceFromNow(startDate)}{' '}
           &rarr; {numNights} night stay
         </span>
-        <span>
-          {format(new Date(startDate), "MMM dd yyyy")} &mdash;{" "}
-          {format(new Date(endDate), "MMM dd yyyy")}
+        <span className="text-[1.2rem] text-grey-500">
+          {format(new Date(startDate), 'MMM dd yyyy')} &mdash;{' '}
+          {format(new Date(endDate), 'MMM dd yyyy')}
         </span>
-      </Stacked>
+      </div>
 
-      <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
+      {/* Status Tag */}
+      <Tag type={statusToTagName[status]}>{status.replace('-', ' ')}</Tag>
 
-      <Amount>{formatCurrency(totalPrice)}</Amount>
+      {/* Price */}
+      <div className="font-sono font-medium">{formatCurrency(totalPrice)}</div>
+
+      {/* Action menu will go here later */}
     </Table.Row>
   );
 }

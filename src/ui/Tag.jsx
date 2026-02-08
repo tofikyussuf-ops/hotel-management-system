@@ -1,13 +1,20 @@
-import styled from 'styled-components';
+// src/ui/Tag.jsx
+function Tag({ type, children }) {
+  const colorClasses = {
+    // Make sure these classes exist
+    blue: 'bg-blue-100 text-blue-700',
+    green: 'bg-green-100 text-green-700',
+    silver: 'bg-grey-100 text-grey-700',
+    yellow: 'bg-yellow-100 text-yellow-700',
+  };
 
-const Textarea = styled.textarea`
-  padding: 0.8rem 1.2rem;
-  border: 1px solid var(--color-grey-300);
-  border-radius: 5px;
-  background-color: var(--color-grey-0);
-  box-shadow: var(--shadow-sm);
-  width: 100%;
-  height: 8rem;
-`;
+  return (
+    <span
+      className={`w-fit rounded-full px-3 py-1 text-[1.1rem] font-semibold uppercase ${colorClasses[type]}`}
+    >
+      {children}
+    </span>
+  );
+}
 
-export default Textarea;
+export default Tag;

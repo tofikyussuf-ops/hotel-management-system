@@ -2,7 +2,8 @@ import { BiLoaderAlt } from 'react-icons/bi';
 
 function SpinnerMini() {
   return (
-    <BiLoaderAlt className="animate-spinner-rotate h-[2.4rem] w-[2.4rem]" />
+    // Added 'inline' and simplified the animation class
+    <BiLoaderAlt className="inline-block h-6 w-6 animate-spin" />
   );
 }
 

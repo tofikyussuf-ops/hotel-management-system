@@ -1,7 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { login as loginApi } from '../../services/apiAuth';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { login as loginApi } from '../../services/apiAuth';
+
+import { useQuery } from '@tanstack/react-query';
+import { getCurrentUser } from '../../services/apiAuth';
 
 export function useLogin() {
   const queryClient = useQueryClient();
@@ -23,4 +26,23 @@ export function useLogin() {
   });
 
   return { login, isPending };
+}
+
+export function useUser() {
+  const {
+    isLoading,
+    data: user,
+    fetchStatus,
+  } = useQuery({
+    queryKey: ['user'],
+    queryFn: getCurrentUser,
+  });
+
+  return {
+    isLoading,
+    user,
+    isAuthenticated: user?.role === 'authenticated',
+    // 'fetching' helps distinguish between loading and background refresh
+    isFetching: fetchStatus === 'fetching',
+  };
 }

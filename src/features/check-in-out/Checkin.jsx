@@ -1,4 +1,4 @@
-import CheckinBooking from '../check-in-out/CheckinBooking';
+import CheckinBooking from './CheckinBooking';
 
 function Checkin() {
   return <CheckinBooking />;

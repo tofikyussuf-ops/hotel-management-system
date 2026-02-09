@@ -5,13 +5,12 @@ import ButtonGroup from '../../ui/ButtonGroup';
 import ButtonText from '../../ui/ButtonText';
 import Heading from '../../ui/Heading';
 import Row from '../../ui/Row';
+import Spinner from '../../ui/Spinner';
 import Tag from '../../ui/Tag';
 import BookingDataBox from './BookingDataBox';
 import { useBooking } from './useBooking';
-import Spinner from '../../ui/Spinner';
 
 function BookingDetail() {
-  // We'll replace these with useBooking() hook later
   const { bookingId } = useParams(); // Grabs the ID from the URL
   const { isLoading, booking } = useBooking(bookingId);
   const status = 'checked-in';

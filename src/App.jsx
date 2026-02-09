@@ -2,6 +2,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import Checkin from './features/bookings/Checkin';
+import Booking from './pages/Booking';
 import Bookings from './pages/Bookings';
 import Cabins from './pages/Cabins';
 import Dashboard from './pages/Dashboard';
@@ -10,7 +12,6 @@ import PageNotFound from './pages/NotFound';
 import Settings from './pages/Settings';
 import Users from './pages/Users';
 import AppLayout from './ui/AppLayout';
-import Booking from './pages/Booking';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,7 +33,7 @@ function App() {
             <Route path="/Cabins" element={<Cabins />} />
             <Route path="/Bookings" element={<Bookings />} />
             <Route path="/Bookings/:bookingId" element={<Booking />} />
-            {/*             <Route path="checkin/:bookingId" element={<Checkin />} /> */}
+            <Route path="checkin/:bookingId" element={<Checkin />} />
             <Route path="/Settings" element={<Settings />} />
             <Route path="/Users" element={<Users />} />
           </Route>

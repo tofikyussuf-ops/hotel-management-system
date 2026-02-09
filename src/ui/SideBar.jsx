@@ -3,6 +3,7 @@ import { useOutsideClick } from '../hooks/useOutsideClick';
 import Logo from './Logo';
 import MainNav from './MainNav';
 import Uploader from '../data/Uploader.jsx';
+import Logout from '../features/authentication/Logout.jsx';
 function Sidebar() {
   const { isOpen, close } = useSidebar();
   const ref = useOutsideClick(close, false);
@@ -15,6 +16,9 @@ function Sidebar() {
       <Logo />
       <MainNav />
       <Uploader />
+      <div className="mt-auto border-t border-grey-100 pt-8">
+        <Logout />
+      </div>
     </aside>
   );
 }

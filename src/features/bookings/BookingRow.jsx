@@ -5,12 +5,12 @@ import {
   HiEye,
   HiTrash,
 } from 'react-icons/hi2';
-
 import { useNavigate } from 'react-router-dom';
 import Menus from '../../ui/Menus';
 import Table from '../../ui/Table';
 import Tag from '../../ui/Tag';
 import { formatCurrency, formatDistanceFromNow } from '../../utils/helpers';
+import { useCheckout } from '../check-in-out/useCheckedout';
 
 function BookingRow({
   booking: {
@@ -32,6 +32,7 @@ function BookingRow({
     'checked-out': 'silver',
   };
   const navigate = useNavigate(); // Initialize navigat
+  const { checkout, isCheckingOut } = useCheckout();
   return (
     <Table.Row>
       <div className="font-sono text-[1.6rem] font-semibold text-grey-600">
@@ -83,7 +84,11 @@ function BookingRow({
             )}
 
             {status === 'checked-in' && (
-              <Menus.Button icon={<HiArrowUpOnSquare />}>
+              <Menus.Button
+                icon={<HiArrowUpOnSquare />}
+                onClick={() => checkout(bookingId)}
+                disabled={isCheckingOut}
+              >
                 Check out
               </Menus.Button>
             )}

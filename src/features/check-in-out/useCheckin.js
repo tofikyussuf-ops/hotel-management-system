@@ -8,23 +8,20 @@ export function useCheckin() {
   const navigate = useNavigate();
 
   const { mutate: checkin, isLoading: isCheckingIn } = useMutation({
-    // 1. The function that calls Supabase
-    mutationFn: (bookingId) =>
+    // Now receiving an object with breakfast details
+    mutationFn: ({ bookingId, breakfast }) =>
       updateBooking(bookingId, {
         status: 'checked-in',
         isPaid: true,
+        ...breakfast, // Spreads hasBreakfast, extrasPrice, and totalPrice if they exist
       }),
 
-    // 2. What happens on success
     onSuccess: (data) => {
       toast.success(`Booking #${data.id} successfully checked in`);
-      // Invalidate all active queries to force a refetch of fresh data
       queryClient.invalidateQueries({ active: true });
       navigate('/');
     },
-
-    // 3. What happens on error
-    onError: () => toast.error('There was an error while checking in'),
+    // ...
   });
 
   return { checkin, isCheckingIn };

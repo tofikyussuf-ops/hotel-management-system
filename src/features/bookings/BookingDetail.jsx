@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useMoveBack } from '../../hooks/useMoveBack';
 import Button from '../../ui/Button';
 import ButtonGroup from '../../ui/ButtonGroup';
@@ -7,28 +7,37 @@ import Heading from '../../ui/Heading';
 import Row from '../../ui/Row';
 import Spinner from '../../ui/Spinner';
 import Tag from '../../ui/Tag';
+import { useCheckout } from '../check-in-out/useCheckedout';
 import BookingDataBox from './BookingDataBox';
 import { useBooking } from './useBooking';
 
 function BookingDetail() {
-  const { bookingId } = useParams(); // Grabs the ID from the URL
-  const { isLoading, booking } = useBooking(bookingId);
-  const status = 'checked-in';
-
+  const { bookingId } = useParams();
+  const navigate = useNavigate();
   const moveBack = useMoveBack();
+
+  const { isLoading, booking } = useBooking(bookingId);
+  const { checkout, isCheckingOut } = useCheckout();
+  if (isLoading) return <Spinner />;
+
+  // 2. IMPORTANT: Check if booking actually exists before trying to use it
+  if (!booking) return <p>No booking data found for ID #{bookingId}</p>;
+
+  // 3. NOW you can safely destructure
+  const { status, id } = booking;
 
   const statusToTagName = {
     unconfirmed: 'blue',
     'checked-in': 'green',
     'checked-out': 'silver',
   };
-  if (isLoading) return <Spinner />;
+
   return (
     <>
       <Row type="horizontal">
         {/* Replaced HeadingGroup styled component with a simple div */}
         <div className="flex items-center gap-[2.4rem]">
-          <Heading as="h1">Booking #{bookingId}</Heading>
+          <Heading as="h1">Booking #{id}</Heading>
           <Tag type={statusToTagName[status]}>{status.replace('-', ' ')}</Tag>
         </div>
         <ButtonText onClick={moveBack}>&larr; Back</ButtonText>
@@ -37,7 +46,15 @@ function BookingDetail() {
       <BookingDataBox booking={booking} />
 
       <ButtonGroup>
-        {/* You can add Check-in or Check-out buttons here later */}
+        {status === 'unconfirmed' && (
+          <Button onClick={() => navigate(`/checkin/${id}`)}>Check in</Button>
+        )}
+
+        {status === 'checked-in' && (
+          <Button onClick={() => checkout(id)} disabled={isCheckingOut}>
+            Check out
+          </Button>
+        )}
         <Button variation="secondary" onClick={moveBack}>
           Back
         </Button>

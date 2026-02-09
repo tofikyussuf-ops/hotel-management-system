@@ -3,13 +3,16 @@ import { useMoveBack } from '../../hooks/useMoveBack';
 import Button from '../../ui/Button';
 import ButtonGroup from '../../ui/ButtonGroup';
 import ButtonText from '../../ui/ButtonText';
+import ConfirmDelete from '../../ui/ConfirmDelete';
 import Heading from '../../ui/Heading';
+import Modal from '../../ui/Modal';
 import Row from '../../ui/Row';
 import Spinner from '../../ui/Spinner';
 import Tag from '../../ui/Tag';
 import { useCheckout } from '../check-in-out/useCheckedout';
 import BookingDataBox from './BookingDataBox';
 import { useBooking } from './useBooking';
+import { useDeleteBooking } from './useDeleteBooking';
 
 function BookingDetail() {
   const { bookingId } = useParams();
@@ -18,6 +21,7 @@ function BookingDetail() {
 
   const { isLoading, booking } = useBooking(bookingId);
   const { checkout, isCheckingOut } = useCheckout();
+  const { deleteBooking, isDeleting } = useDeleteBooking();
   if (isLoading) return <Spinner />;
 
   // 2. IMPORTANT: Check if booking actually exists before trying to use it
@@ -59,6 +63,23 @@ function BookingDetail() {
           Back
         </Button>
       </ButtonGroup>
+      <Modal>
+        <Modal.Open opens="delete">
+          <Button variation="danger">Delete booking</Button>
+        </Modal.Open>
+
+        <Modal.Window name="delete">
+          <ConfirmDelete
+            resourceName="booking"
+            disabled={isDeleting}
+            onConfirm={() =>
+              deleteBooking(bookingId, {
+                onSettled: () => moveBack(), // Go back after delete is finished
+              })
+            }
+          />
+        </Modal.Window>
+      </Modal>
     </>
   );
 }

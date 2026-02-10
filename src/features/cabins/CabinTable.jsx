@@ -1,19 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
-import { getCabins } from '../../services/apiCabins';
 import Menus from '../../ui/Menus'; // 1. Import the Menus component
 import Spinner from '../../ui/Spinner';
 import CabinRow from './CabinRow';
+import { useCabins } from './useCabin';
 
 function CabinTable() {
-  const {
-    isPending,
-    data: cabins,
-    error,
-  } = useQuery({
-    queryKey: ['cabins'],
-    queryFn: getCabins,
-  });
+  const { isPending, error, cabins } = useCabins();
   const [searchParams] = useSearchParams();
   if (isPending) return <Spinner />;
   // 1. IMPROVED GUARD: Check for error first

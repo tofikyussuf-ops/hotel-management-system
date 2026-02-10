@@ -17,6 +17,12 @@ function UpdateSettingsForm() {
   } = settings;
 
   if (isLoading) return <Spinner />;
+  if (!settings || Object.keys(settings).length === 0)
+    return (
+      <p className="p-8 text-center">
+        Please log in as an administrator to edit settings.
+      </p>
+    );
 
   function handleUpdate(e, field) {
     const { value } = e.target;

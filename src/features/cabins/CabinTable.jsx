@@ -16,7 +16,21 @@ function CabinTable() {
   });
   const [searchParams] = useSearchParams();
   if (isPending) return <Spinner />;
-  if (!cabins) return <p>No cabins found. check your connection</p>;
+  // 1. IMPROVED GUARD: Check for error first
+  if (error)
+    return (
+      <p className="p-8 text-center font-semibold text-red-700">
+        Error loading cabins. Please ensure you are logged in.
+      </p>
+    );
+
+  // 2. IMPROVED GUARD: Check if cabins exists AND has length
+  if (!cabins?.length)
+    return (
+      <p className="rounded-md bg-grey-50 p-8 text-center">
+        No cabins found in the database.
+      </p>
+    );
   // 1) FILTER (Current logic)
   const filterValue = searchParams.get('discount') || 'all';
   let filteredCabins;

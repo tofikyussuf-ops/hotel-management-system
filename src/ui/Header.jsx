@@ -1,6 +1,7 @@
 import { HiBars3 } from 'react-icons/hi2';
 import { useSidebar } from '../context/SidebarContext.jsx';
 import { useUser } from '../features/authentication/useLogin.js';
+import HeaderMenu from './HeaderMenu.jsx';
 
 function Header() {
   const { toggle } = useSidebar();
@@ -22,21 +23,11 @@ function Header() {
         <HiBars3 className="h-8 w-8 text-brand-600" />
       </button>
 
-      {/* 2. Right Side: User Info & Actions */}
       <div className="ml-auto flex items-center gap-[1.2rem] md:gap-[2.4rem]">
-        {/* User Profile Info */}
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 overflow-hidden rounded-full border border-grey-200 bg-grey-100 shadow-sm">
-            <img
-              src={avatar || 'https://i.pravatar.cc/100'} // Fallback if no avatar
-              alt={`Avatar of ${fullName}`}
-              className="h-full w-full object-cover"
-            />
-          </div>
-          <span className="hidden text-[1.4rem] font-medium text-grey-600 sm:block">
-            {fullName || 'User'}
-          </span>
-        </div>
+        {/* We just drop the component here. It handles its own fetching! */}
+        <UserAvatar />
+        <HeaderMenu />
+        {/* Future: Add HeaderMenu (Account, Theme Toggle, etc.) here */}
       </div>
     </header>
   );

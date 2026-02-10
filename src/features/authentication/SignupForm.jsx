@@ -3,18 +3,25 @@ import Button from '../../ui/Button';
 import Form from '../../ui/Form';
 import FormRow from '../../ui/FormRow';
 import Input from '../../ui/Input';
+import { useSignup } from './useSignup';
 
 function SignupForm() {
   // 1. Initialize the hook
   const { register, formState, handleSubmit, getValues, reset } = useForm();
   const { errors } = formState;
+  const { signup, isPending } = useSignup();
 
   function onSubmit({ fullName, email, password }) {
     // Logic to call your API/Supabase signup
     console.log('Creating user:', { fullName, email, password });
-
-    // Optional: reset() the form after success
+    signup(
+      { fullName, email, password },
+      {
+        onSettled: () => reset(), // Clears the form regardless of success or failure
+      }
+    );
   }
+  // Optional: reset() the form after success
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -22,6 +29,7 @@ function SignupForm() {
         <Input
           type="text"
           id="fullName"
+          disabled={isPending}
           {...register('fullName', { required: 'This field is required' })}
         />
       </FormRow>
@@ -30,6 +38,7 @@ function SignupForm() {
         <Input
           type="email"
           id="email"
+          disabled={isPending}
           {...register('email', {
             required: 'This field is required',
             pattern: {
@@ -47,6 +56,7 @@ function SignupForm() {
         <Input
           type="password"
           id="password"
+          disabled={isPending}
           {...register('password', {
             required: 'This field is required',
             minLength: {
@@ -61,6 +71,7 @@ function SignupForm() {
         <Input
           type="password"
           id="passwordConfirm"
+          disabled={isPending}
           {...register('passwordConfirm', {
             required: 'This field is required',
             validate: (value) =>

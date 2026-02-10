@@ -1,14 +1,14 @@
 import { HiBars3 } from 'react-icons/hi2';
 import { useSidebar } from '../context/SidebarContext.jsx';
-import { useUser } from '../features/authentication/useLogin.js';
+
 import HeaderMenu from './HeaderMenu.jsx';
+import UserAvatar from '../features/authentication/UserAvatar.jsx';
 
 function Header() {
   const { toggle } = useSidebar();
-  const { user } = useUser(); // Get the real logged-in user
+  // Get the real logged-in user
 
   // Extract user metadata (Supabase stores this in user_metadata)
-  const { fullName, avatar } = user?.user_metadata || {};
 
   return (
     <header className="flex items-center justify-between border-b border-grey-100 bg-white px-[2.4rem] py-[1.2rem] lg:col-start-2 lg:px-[4.8rem]">

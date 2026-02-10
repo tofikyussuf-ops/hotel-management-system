@@ -1,4 +1,4 @@
-import { useUser } from './useUser';
+import { useUser } from './useLogin';
 
 function UserAvatar() {
   const { user, isLoading } = useUser();

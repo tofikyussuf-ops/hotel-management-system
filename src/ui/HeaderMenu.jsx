@@ -1,6 +1,6 @@
 import { HiOutlineUser, HiOutlineMoon, HiOutlineSun } from 'react-icons/hi2';
 import { useNavigate } from 'react-router-dom';
-import ButtonIcon from '../../ui/ButtonIcon'; // A simple styled button for icons
+import ButtonIcon from './ButtonIcon';
 
 function HeaderMenu() {
   const navigate = useNavigate();

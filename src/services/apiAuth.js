@@ -1,4 +1,5 @@
 import supabase from './supabase';
+import { supabaseUrl } from './supabase';
 
 export async function signup({ fullName, email, password }) {
   const { data, error } = await supabase.auth.signUp({
@@ -67,12 +68,30 @@ export async function updateCurrentUser({ password, fullName, avatar }) {
   if (storageError) throw new Error(storageError.message);
 
   // 3. Update avatar in the user metadata
+  // Step 3 in apiAuth.js
   const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
     data: {
-      avatar: `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/avatars/${fileName}`,
+      // We must return the URL you just shared
+      avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
     },
   });
 
   if (error2) throw new Error(error2.message);
+
+  // VERY IMPORTANT: Return the updatedUser object
   return updatedUser;
+
+  if (error2) throw new Error(error2.message);
+  return updatedUser;
+}
+
+export async function verifyCurrentPassword({ email, password }) {
+  // We try to sign in again with the email and "current" password
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) throw new Error('Incorrect current password. Please try again.');
+  return true;
 }

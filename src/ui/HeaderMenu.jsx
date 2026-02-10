@@ -1,6 +1,7 @@
-import { HiOutlineUser, HiOutlineMoon, HiOutlineSun } from 'react-icons/hi2';
+import { HiOutlineUser } from 'react-icons/hi2';
 import { useNavigate } from 'react-router-dom';
 import ButtonIcon from './ButtonIcon';
+import DarkModeToggle from './DarkMode';
 
 function HeaderMenu() {
   const navigate = useNavigate();
@@ -14,9 +15,7 @@ function HeaderMenu() {
       </li>
       {/* Future: Add DarkModeToggle here */}
       <li>
-        <ButtonIcon>
-          <HiOutlineMoon className="h-6 w-6 text-brand-600" />
-        </ButtonIcon>
+        <DarkModeToggle />
       </li>
     </ul>
   );

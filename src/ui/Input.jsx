@@ -12,7 +12,7 @@ const Input = React.forwardRef(function Input(
       autoComplete={autoComplete}
       placeholder={placeholder}
       {...props}
-      className="block w-full rounded-md border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 sm:text-base"
+      className="block w-full rounded-md border border-[var(--color-grey-300)] bg-[var(--color-grey-0)] px-4 py-3 text-[var(--color-grey-900)] shadow-sm transition-all placeholder:text-[var(--color-grey-400)] focus:border-[var(--color-brand-600)] focus:outline-none focus:ring-1 focus:ring-[var(--color-brand-600)] disabled:bg-[var(--color-grey-200)] disabled:text-[var(--color-grey-500)] sm:text-base"
     />
   );
 });

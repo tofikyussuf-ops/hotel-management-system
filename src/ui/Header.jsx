@@ -6,28 +6,23 @@ import UserAvatar from '../features/authentication/UserAvatar.jsx';
 
 function Header() {
   const { toggle } = useSidebar();
-  // Get the real logged-in user
-
-  // Extract user metadata (Supabase stores this in user_metadata)
 
   return (
-    <header className="flex items-center justify-between border-b border-grey-100 bg-white px-[2.4rem] py-[1.2rem] lg:col-start-2 lg:px-[4.8rem]">
+    <header className="flex items-center justify-between border-b border-[var(--color-grey-100)] bg-[var(--color-grey-0)] px-[2.4rem] py-[1.2rem] transition-all duration-300 lg:col-start-2 lg:px-[4.8rem]">
       {/* 1. Mobile Menu Toggle */}
       <button
         onClick={(e) => {
           e.stopPropagation();
           toggle();
         }}
-        className="rounded-md p-2 outline-none hover:bg-grey-100 lg:hidden"
+        className="rounded-md p-2 outline-none hover:bg-[var(--color-grey-100)] lg:hidden"
       >
-        <HiBars3 className="h-8 w-8 text-brand-600" />
+        <HiBars3 className="h-8 w-8 text-[var(--color-brand-600)]" />
       </button>
 
       <div className="ml-auto flex items-center gap-[1.2rem] md:gap-[2.4rem]">
-        {/* We just drop the component here. It handles its own fetching! */}
         <UserAvatar />
         <HeaderMenu />
-        {/* Future: Add HeaderMenu (Account, Theme Toggle, etc.) here */}
       </div>
     </header>
   );

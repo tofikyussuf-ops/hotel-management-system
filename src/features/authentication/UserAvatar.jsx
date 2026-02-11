@@ -3,16 +3,18 @@ import { useUser } from './useLogin';
 function UserAvatar() {
   const { user, isLoading } = useUser();
 
-  // 1. Handle loading state
+  // Handle loading state with theme-aware colors
   if (isLoading)
-    return <div className="h-9 w-9 animate-pulse rounded-full bg-grey-200" />;
+    return (
+      <div className="h-14 w-14 animate-pulse rounded-full bg-[var(--color-grey-200)]" />
+    );
 
   const { fullName, avatar } = user.user_metadata;
 
   return (
-    <div className="flex items-center gap-3 text-sm font-medium text-grey-600">
+    <div className="flex items-center gap-4 text-lg font-semibold text-[var(--color-grey-600)]">
       <img
-        className="block aspect-square w-9 rounded-full object-cover object-center outline outline-2 outline-grey-100"
+        className="block aspect-square w-14 rounded-full object-cover object-center outline outline-2 outline-[var(--color-grey-100)]"
         src={avatar || 'default-user.jpg'}
         alt={`Avatar of ${fullName}`}
       />

@@ -71,7 +71,7 @@ function List({ id, children }) {
   return createPortal(
     <ul
       ref={ref}
-      className="fixed z-[1000] rounded-md border border-grey-100 bg-white px-4 py-3 shadow-md"
+      className="fixed z-[1000] rounded-md border border-[var(--color-grey-100)] bg-[var(--color-grey-0)] px-4 py-3 shadow-md"
       style={{ right: `${position.x}px`, top: `${position.y}px` }}
     >
       {children}

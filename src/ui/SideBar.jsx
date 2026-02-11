@@ -2,7 +2,7 @@ import { useSidebar } from '../context/SidebarContext.jsx';
 import { useOutsideClick } from '../hooks/useOutsideClick';
 import Logo from './Logo';
 import MainNav from './MainNav';
-import Uploader from '../data/Uploader.jsx';
+/* import Uploader from '../data/Uploader.jsx'; */
 import Logout from '../features/authentication/Logout.jsx';
 import DarkModeToggle from './DarkMode.jsx';
 
@@ -17,7 +17,7 @@ function Sidebar() {
     >
       <Logo />
       <MainNav />
-      <Uploader />
+      {/*  <Uploader /> */}
 
       {/* Put the theme toggle and logout at the bottom */}
       <div className="mt-auto flex flex-col gap-4 border-t border-[var(--color-grey-100)] pt-8">

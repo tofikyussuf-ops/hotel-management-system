@@ -1,4 +1,4 @@
-# Stay — Professional Hotel Management System
+# Horizon Hotel Suite — Professional Hotel Management System
 
 A sophisticated, internal property management system (PMS) designed for boutique hotels and resorts. This application allows hotel staff to manage bookings, cabins, guests, and settings through a high-performance, responsive dashboard.
 
@@ -29,5 +29,3 @@ The following components have been custom-built to match the hotel's brand guide
 - **Modals:** Accessible portals for CRUD operations.
 - **Forms:** Validation-ready vertical and horizontal layouts.
 - **Navigation:** Persistent sidebar with active route tracking.
-
-

@@ -2,7 +2,7 @@ import Spinner from '../../ui/Spinner';
 import { useCabins } from '../cabins/useCabin'; // Assuming you have this hook
 import DurationChart from './DurationChart';
 import SalesChart from './SalesChart';
-import Stats from './stats';
+import Stats from './Stats'; // Change 'stats' to 'Stats'
 import TodayActivity from './TodayActivity';
 import { useRecentBookings } from './useRecentBooking';
 import { useRecentStays } from './useRecentStay';

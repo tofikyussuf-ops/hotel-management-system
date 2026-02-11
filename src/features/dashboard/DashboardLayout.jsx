@@ -3,6 +3,7 @@ import { useCabins } from '../cabins/useCabin'; // Assuming you have this hook
 import DurationChart from './DurationChart';
 import { useRecentBookings } from './useRecentBooking';
 import { useRecentStays } from './useRecentStay';
+import Stats from './stats';
 
 function DashboardLayout() {
   const { bookings, isPending: isPending1 } = useRecentBookings();
@@ -15,13 +16,12 @@ function DashboardLayout() {
   return (
     <div className="grid grid-cols-1 grid-rows-[auto_34rem_auto] gap-10 md:grid-cols-2 lg:grid-cols-4">
       {/* 1. Statistics Row */}
-      {/* <Stats
+      <Stats
         bookings={bookings}
         confirmedStays={confirmedStays}
         numDays={numDays}
         cabinCount={cabins.length}
-      /> */}
-
+      />
       {/* 2. Charts Row */}
       {/* We pass stays to the duration chart which we already themed */}
       <div className="col-span-full rounded-md border border-[var(--color-grey-100)] bg-[var(--color-grey-0)] p-8 shadow-sm lg:col-span-2">

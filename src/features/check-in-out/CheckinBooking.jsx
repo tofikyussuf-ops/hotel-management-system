@@ -75,7 +75,7 @@ function CheckinBooking() {
         </div>
       )}
       {/* Tailwind optimized Box */}
-      <div className="rounded-md border border-gray-100 bg-white px-10 py-6">
+      <div className="rounded-md border border-[var(--color-grey-100)] bg-[var(--color-grey-0)] px-10 py-6">
         <Checkbox
           checked={confirmPaid}
           onChange={() => setConfirmPaid((s) => !s)}

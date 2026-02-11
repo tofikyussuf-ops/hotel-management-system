@@ -15,20 +15,22 @@ function Button({
   size = 'medium',
   variation = 'primary',
   children,
-  onclick,
+  as, // 👈 Extract the 'as' prop
   ...props
 }) {
-  // Base classes that apply to ALL buttons
-  const baseStyles =
-    'rounded-sm shadow-sm transition-colors duration-300 focus:outline-none';
+  // 1. Determine which tag to use (default to button)
+  const Tag = as || 'button';
 
-  // Combine base, size, and variation classes
+  const baseStyles =
+    'rounded-sm shadow-sm transition-colors duration-300 focus:outline-none inline-block';
+
   const className = `${baseStyles} ${sizes[size]} ${variations[variation]}`;
 
   return (
-    <button onClick={onclick} className={className} {...props}>
+    /* 2. Render the Dynamic Tag and spread props so 'to' reaches Link */
+    <Tag className={className} {...props}>
       {children}
-    </button>
+    </Tag>
   );
 }
 

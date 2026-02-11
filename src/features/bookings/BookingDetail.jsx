@@ -44,7 +44,9 @@ function BookingDetail() {
           <Heading as="h1">Booking #{id}</Heading>
           <Tag type={statusToTagName[status]}>{status.replace('-', ' ')}</Tag>
         </div>
-        <ButtonText onClick={moveBack}>&larr; Back</ButtonText>
+        <ButtonText color="grey" onClick={moveBack}>
+          &larr; Back
+        </ButtonText>
       </Row>
 
       <BookingDataBox booking={booking} />
@@ -59,27 +61,25 @@ function BookingDetail() {
             Check out
           </Button>
         )}
-        <Button variation="secondary" onClick={moveBack}>
-          Back
-        </Button>
-      </ButtonGroup>
-      <Modal>
-        <Modal.Open opens="delete">
-          <Button variation="danger">Delete booking</Button>
-        </Modal.Open>
 
-        <Modal.Window name="delete">
-          <ConfirmDelete
-            resourceName="booking"
-            disabled={isDeleting}
-            onConfirm={() =>
-              deleteBooking(bookingId, {
-                onSettled: () => moveBack(), // Go back after delete is finished
-              })
-            }
-          />
-        </Modal.Window>
-      </Modal>
+        <Modal>
+          <Modal.Open opens="delete">
+            <Button variation="danger">Delete booking</Button>
+          </Modal.Open>
+
+          <Modal.Window name="delete">
+            <ConfirmDelete
+              resourceName="booking"
+              disabled={isDeleting}
+              onConfirm={() =>
+                deleteBooking(bookingId, {
+                  onSettled: () => moveBack(), // Go back after delete is finished
+                })
+              }
+            />
+          </Modal.Window>
+        </Modal>
+      </ButtonGroup>
     </>
   );
 }

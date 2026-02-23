@@ -39,28 +39,45 @@ async function createCabins() {
   const { error } = await supabase.from('cabins').insert(cabins);
   if (error) console.log(error.message);
 }
-
 async function createBookings() {
-  // Bookings need a guestId and a cabinId. We can't tell Supabase IDs for each object, it will calculate them on its own. So it might be different for different people, especially after multiple uploads. Therefore, we need to first get all guestIds and cabinIds, and then replace the original IDs in the booking data with the actual ones from the DB
-  const { data: guestsIds } = await supabase
+  // 1. Fetch IDs
+  const { data: guestsData } = await supabase
     .from('guests')
     .select('id')
     .order('id');
-  const allGuestIds = guestsIds.map((cabin) => cabin.id);
-  const { data: cabinsIds } = await supabase
+  const { data: cabinsData } = await supabase
     .from('cabins')
     .select('id')
     .order('id');
-  const allCabinIds = cabinsIds.map((cabin) => cabin.id);
+
+  const allGuestIds = guestsData.map((g) => g.id);
+  const allCabinIds = cabinsData.map((c) => c.id);
+
+  console.log('DB Guests Count:', allGuestIds.length);
+  console.log(
+    'Local Bookings Max Guest ID reference:',
+    Math.max(...bookings.map((b) => b.guestId))
+  );
 
   const finalBookings = bookings.map((booking) => {
-    // Here relying on the order of cabins, as they don't have and ID yet
     const cabin = cabins.at(booking.cabinId - 1);
+
+    // The Mapping
+    const gId = allGuestIds.at(booking.guestId - 1);
+    const cId = allCabinIds.at(booking.cabinId - 1);
+
+    // If this triggers, your JSON data is referencing a guest that doesn't exist
+    if (gId === undefined) {
+      console.error(
+        `CRITICAL: Booking for Guest #${booking.guestId} failed mapping because only ${allGuestIds.length} guests exist in DB.`
+      );
+    }
+
     const numNights = subtractDates(booking.endDate, booking.startDate);
     const cabinPrice = numNights * (cabin.regularPrice - cabin.discount);
     const extrasPrice = booking.hasBreakfast
       ? numNights * 15 * booking.numGuests
-      : 0; // hardcoded breakfast price
+      : 0;
     const totalPrice = cabinPrice + extrasPrice;
 
     let status;
@@ -88,16 +105,14 @@ async function createBookings() {
       cabinPrice,
       extrasPrice,
       totalPrice,
-      guestId: allGuestIds.at(booking.guestId - 1),
-      cabinId: allCabinIds.at(booking.cabinId - 1),
+      guestId: gId, // Will be NULL in DB if undefined here
+      cabinId: cId,
       status,
     };
   });
 
-  console.log(finalBookings);
-
   const { error } = await supabase.from('bookings').insert(finalBookings);
-  if (error) console.log(error.message);
+  if (error) console.log('Final Error:', error.message);
 }
 
 function Uploader() {

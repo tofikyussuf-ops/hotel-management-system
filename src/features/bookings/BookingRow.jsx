@@ -6,13 +6,13 @@ import {
   HiTrash,
 } from 'react-icons/hi2';
 import { useNavigate } from 'react-router-dom';
+import ConfirmDelete from '../../ui/ConfirmDelete';
 import Menus from '../../ui/Menus';
+import Modal from '../../ui/Modal';
 import Table from '../../ui/Table';
 import Tag from '../../ui/Tag';
 import { formatCurrency, formatDistanceFromNow } from '../../utils/helpers';
 import { useCheckout } from '../check-in-out/useCheckedout';
-import Modal from '../../ui/Modal';
-import ConfirmDelete from '../../ui/ConfirmDelete';
 import { useDeleteBooking } from './useDeleteBooking';
 function BookingRow({
   booking: {
@@ -24,27 +24,35 @@ function BookingRow({
     numGuests,
     totalPrice,
     status,
-    guests: { fullName: guestName, email } = {},
-    cabins: { name: cabinName } = {},
+    guests, // 1. Pull the guests object out first
+    cabins, // 2. Pull the cabins object out first
   },
 }) {
+  // 3. Destructure safely with fallbacks
+  const { fullName: guestName, email } = guests || {};
+  const { name: cabinName } = cabins || {};
+
   const statusToTagName = {
     unconfirmed: 'blue',
     'checked-in': 'green',
     'checked-out': 'silver',
   };
+
   const { deleteBooking, isDeleting } = useDeleteBooking();
-  const navigate = useNavigate(); // Initialize navigat
+  const navigate = useNavigate();
   const { checkout, isCheckingOut } = useCheckout();
+
   return (
     <Table.Row>
       <div className="font-sono text-[1.6rem] font-semibold text-grey-600">
-        {cabinName}
+        {cabinName || 'N/A'}
       </div>
 
       <div className="flex flex-col gap-1">
-        <span className="font-medium text-grey-700">{guestName}</span>
-        <span className="text-[1.2rem] text-grey-500">{email}</span>
+        <span className="font-medium text-grey-700">
+          {guestName || 'Deleted Guest'}
+        </span>
+        <span className="text-[1.2rem] text-grey-500">{email || ''}</span>
       </div>
 
       <div className="flex flex-col gap-1">
@@ -64,7 +72,6 @@ function BookingRow({
 
       <div className="font-sono font-medium">{formatCurrency(totalPrice)}</div>
 
-      {/* 2. The Menu implementation */}
       <div>
         <Modal>
           <Menus.Menu>
@@ -73,7 +80,7 @@ function BookingRow({
             <Menus.List id={bookingId}>
               <Menus.Button
                 icon={<HiEye />}
-                onClick={() => navigate(`/Bookings/${bookingId}`)}
+                onClick={() => navigate(`/bookings/${bookingId}`)} // Ensure lowercase 'bookings'
               >
                 See details
               </Menus.Button>
@@ -103,7 +110,6 @@ function BookingRow({
             </Menus.List>
           </Menus.Menu>
 
-          {/* 3. The Window that corresponds to "delete" */}
           <Modal.Window name="delete">
             <ConfirmDelete
               resourceName="booking"

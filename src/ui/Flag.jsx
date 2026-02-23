@@ -1,4 +1,7 @@
 function Flag({ src, alt }) {
+  // If there's no source, don't render a broken image box
+  if (!src) return null;
+
   return (
     <img
       src={src}
